@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name="Todo")
-public class ToDoEntity {
+public class TodoEntity {
 
     @Id
     @GeneratedValue(generator="system-uuid")

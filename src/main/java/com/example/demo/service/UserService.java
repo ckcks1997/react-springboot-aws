@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-
 import com.example.demo.model.UserEntity;
 import com.example.demo.persistence.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,17 +9,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     public UserEntity create(final UserEntity userEntity){
         if(userEntity == null || userEntity.getUsername() == null){
-            throw new RuntimeException("invalid arguments");
+            throw new RuntimeException("err: invalid arguments");
         }
+
         final String username = userEntity.getUsername();
         if(userRepository.existsByUsername(username)){
-            log.warn("username exists!! {}", username);
-            throw new RuntimeException("username already exists!!");
+            log.warn("Username 존재: {}", username);
+            throw new RuntimeException("username 존재");
         }
 
         return userRepository.save(userEntity);
@@ -29,4 +30,6 @@ public class UserService {
     public UserEntity getByCredentials(final String username, final String password){
         return userRepository.findByUsernameAndPassword(username, password);
     }
+
+
 }

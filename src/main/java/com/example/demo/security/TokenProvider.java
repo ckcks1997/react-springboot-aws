@@ -6,6 +6,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -37,4 +39,15 @@ public class TokenProvider {
         return claims.getSubject();
     }
 
+    public String create(final Authentication authentication){
+        OAuth2User userPrincipal = (OAuth2User) authentication.getPrincipal();
+        Date expriydate = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+
+        return Jwts.builder()
+                .setSubject(userPrincipal.getName())
+                .setIssuedAt(new Date())
+                .setExpiration(expriydate)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+    }
 }
